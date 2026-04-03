@@ -1,6 +1,6 @@
 [project]
 name = "ampav-whisper"
-version = "0.0.1"
+version = "0.0.2"
 description = "Whisper tooling for the AMPAV environment"
 readme = "README.md"
 license = "Apache-2.0"
