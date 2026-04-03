@@ -1,0 +1,29 @@
+[project]
+name = "ampav-whisper"
+version = "0.0.1"
+description = "Whisper tooling for the AMPAV environment"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",   
+]
+authors = [
+    {name = "Brian Wheeler", email="bdwheele@iu.edu"},
+]
+
+requires-python = ">=3.12"
+dependencies = [
+    "ampav-core",
+    "openai-whisper",
+]
+
+[project.urls]
+Homepage = "https://github.com/AMPAV/ampav-whisper"
+Repository = "https://github.com/AMPAV/ampav-whisper.git"
+Issues = "https://github.com/AMPAV/ampav-whisper/issues"
+
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
