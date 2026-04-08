@@ -3,6 +3,7 @@ import torch
 from pathlib import Path
 from ampav.core.gpu import get_best_device, get_devices
 from ampav.core.schema import Metadata, TranscriptOutput, WordData, ToolInformation
+from ampav.core.media import load_audio
 from time import time
 
 def detect_language(audiofile: Path, modelname: str, device: str=None) -> dict:
@@ -43,7 +44,7 @@ def transcribe_file(audiofile: Path, modelname: str,
                   output=transcript)
     return md
 
-
+    
 
 
 def hello():
