@@ -1,6 +1,6 @@
 [project]
 name = "ampav-whisper"
-version = "0.0.2"
+version = "0.0.3"
 description = "Whisper tooling for the AMPAV environment"
 readme = "README.md"
 license = "Apache-2.0"
@@ -14,7 +14,7 @@ authors = [
 
 requires-python = ">=3.12"
 dependencies = [
-    "ampav-core",
+    "ampav-core>=0.0.6",
     "openai-whisper",
 ]
 
