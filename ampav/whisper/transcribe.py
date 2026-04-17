@@ -1,17 +1,21 @@
 import whisper
 import torch
 from pathlib import Path
+from ampav.core.formats.transcript.webvtt import paragraphs_to_webvtt
+from ampav.core.logging import LOG_FORMAT
 from ampav.core.schema import ToolOutput, Transcript, WordSegment, ParagraphSegment, AVMetadata
 from time import time
 import logging
 import argparse
+from ampav.core.media import load_and_resample_audio_file
 
 
 def detect_language(audiofile: Path, modelname: str, device: str=None) -> dict:
     if device is None:
-        device="cuda" if torch.cuda.is_available() else "cpu"
+        device="cuda" if torch.cuda.is_available() else "cpu"    
     model = whisper.load_model(modelname).to(device)    
-    audio = whisper.pad_or_trim(whisper.load_audio(audiofile))
+    _, _, adata = load_and_resample_audio_file(audiofile, 0, 16000, 1)
+    audio = whisper.pad_or_trim(adata)
     mel = whisper.log_mel_spectrogram(audio, n_mels=model.dims.n_mels).to(model.device)
     _, probs = model.detect_language(mel)
     return probs
@@ -41,7 +45,8 @@ def transcribe_file(audiofile: Path, modelname: str,
         output.parameters['device'] = device
 
     model = whisper.load_model(modelname).to(device)    
-    audio = whisper.pad_or_trim(whisper.load_audio(audiofile))
+    _, _, adata = load_and_resample_audio_file(audiofile, 0, 16000, 1)
+    audio = whisper.pad_or_trim(adata)
     mel = whisper.log_mel_spectrogram(audio, n_mels=model.dims.n_mels).to(model.device)
     
     if language is None:
@@ -58,15 +63,15 @@ def transcribe_file(audiofile: Path, modelname: str,
     xscript = Transcript(text=result['text'].strip(),
                          media_duration=av.duration)
     for s in result['segments']:        
-        xscript.paragraphs.append(ParagraphSegment(start_time=s['end'],
-                                                   end_time = s['start'],
+        xscript.paragraphs.append(ParagraphSegment(start_time=s['start'],
+                                                   end_time = s['end'],
                                                    text=s['text'].strip()))
         for w in s['words']:
             xscript.words.append(WordSegment.from_str(w['word'],
                                                       start_time=w['start'],
                                                       end_time=w['end']))
     output.output = xscript
-    logging.info(f"Finsihed transcript, {len(xscript.paragraphs)} paragraphs, {len(xscript.words)} words.")
+    logging.info(f"Finished transcript, {len(xscript.paragraphs)} paragraphs, {len(xscript.words)} words.")
 
     return output
 
@@ -78,11 +83,15 @@ def cli_whisper_transcribe():
     parser.add_argument("--language", type=str, default=None, help="Audio Language")
     parser.add_argument("--device", type=str, default=None, help="Device to use (default: best)")
     parser.add_argument("--debug", action="store_true", help="Enable debugging")
+    parser.add_argument("--webvtt", action="store_true", help="Dump webvtt instead of yaml")
     args = parser.parse_args()
-
-    logging.getLogger().setLevel(logging.DEBUG if args.debug else logging.INFO)
+    logging.basicConfig(format=LOG_FORMAT, level=logging.DEBUG if args.debug else logging.INFO)
     
     xscript = transcribe_file(args.file, modelname=args.model, language=args.language,
                               device=args.device)
-    print(xscript.model_dump_yaml())
+    
+    if args.webvtt:
+        print(paragraphs_to_webvtt(xscript.output.paragraphs))
+    else:
+        print(xscript.model_dump_yaml())
         
