@@ -1,7 +1,7 @@
 import whisper
 import torch
 from pathlib import Path
-from ampav.core.formats.transcript.webvtt import paragraphs_to_webvtt
+from ampav.core.file_formats.webvtt import paragraphs_to_webvtt
 from ampav.core.logging import LOG_FORMAT
 from ampav.core.schema import ToolOutput, Transcript, WordSegment, ParagraphSegment, AVMetadata
 from time import time
@@ -23,7 +23,20 @@ def detect_language(audiofile: Path, modelname: str, device: str=None) -> dict:
 
 def transcribe_file(audiofile: Path, modelname: str, 
                     language: str | None=None, device: str=None) -> ToolOutput:
-        
+    """
+    Docstring for transcribe_file
+    
+    :param audiofile: Description
+    :type audiofile: Path
+    :param modelname: Description
+    :type modelname: str
+    :param language: Description
+    :type language: str | None
+    :param device: Description
+    :type device: str
+    :return: Description
+    :rtype: ToolOutput
+    """
     # get the duration of the media file.
     av = AVMetadata.from_file(audiofile)
 
