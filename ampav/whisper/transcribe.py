@@ -84,7 +84,8 @@ def transcribe_full_file(audiofile: Path, modelname: str,
         for w in s['words']:
             xscript.words.append(WordSegment.from_str(w['word'],
                                                       start_time=w['start'],
-                                                      end_time=w['end']))
+                                                      end_time=w['end'],
+                                                      tool_specific={'probability': float(w['probability'])}))
     output.output = xscript
     logging.info(f"Finished transcript, {len(xscript.paragraphs)} paragraphs, {len(xscript.words)} words.")
 
