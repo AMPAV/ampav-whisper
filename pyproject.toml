@@ -19,13 +19,13 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/AMPAV/ampav-parakeet"
-Repository = "https://github.com/AMPAV/ampav-parakeet.git"
-Issues = "https://github.com/AMPAV/ampav-parakeet/issues"
+Homepage = "https://github.com/AMPAV/ampav-whisper"
+Repository = "https://github.com/AMPAV/ampav-whisper.git"
+Issues = "https://github.com/AMPAV/ampav-whisper/issues"
 
 
 [project.scripts]
-amapv_whisper_transcribe = "ampav.parakeet.transcribe:cli_whisper_transcribe"
+ampav_whisper_transcribe = "ampav.whisper.transcribe:cli_whisper_transcribe"
 
 [build-system]
 requires = ["setuptools"]
