@@ -183,6 +183,7 @@ def transcribe_chunked_file(audiofile: Path, modelname: str,
 
 def cli_whisper_transcribe():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--version", action="version", version=__version__)
     parser.add_argument("file", type=Path, help="File to transcribe using whisper")
     parser.add_argument("output", type=Path, help="Output file")
     parser.add_argument("--model", type=str, default="medium", help="Model to use")
