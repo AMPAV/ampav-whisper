@@ -1,6 +1,6 @@
 [project]
 name = "ampav-whisper"
-version = "0.0.12"
+dynamic = ["version"]
 description = "Whisper tooling for the AMPAV environment"
 readme = "README.md"
 license = "Apache-2.0"
@@ -30,3 +30,6 @@ ampav_whisper_transcribe = "ampav.whisper.transcribe:cli_whisper_transcribe"
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "ampav.whisper.__version__"}

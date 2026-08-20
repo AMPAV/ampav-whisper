@@ -9,6 +9,7 @@ import logging
 import argparse
 from ampav.core.media import load_and_resample_audio_file, ChunkedAudio
 from ampav.core.utils import dump_data
+from . import __version__
 
 
 def detect_language(audiofile: Path, modelname: str, device: str=None) -> dict:
@@ -50,7 +51,8 @@ def transcribe_full_file(audiofile: Path, modelname: str,
     av = AVMetadata.from_file(audiofile)
 
     # create our output structure
-    output = ToolOutput(tool_name="whisper",                        
+    output = ToolOutput(tool_name="whisper",  
+                        tool_version=__version__,                      
                         parameters={"model": modelname,
                                     "language": language,
                                     "device": device,
@@ -119,7 +121,8 @@ def transcribe_chunked_file(audiofile: Path, modelname: str,
     av = AVMetadata.from_file(audiofile)
 
     # create our output structure
-    output = ToolOutput(tool_name="whisper",                        
+    output = ToolOutput(tool_name="whisper",       
+                        tool_version=__version__,                 
                         parameters={"model": modelname,
                                     "language": language,
                                     "device": device,
